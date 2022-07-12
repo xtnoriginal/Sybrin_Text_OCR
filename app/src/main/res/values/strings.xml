@@ -3,4 +3,7 @@
     <string name="title_camera">Camera</string>
     <string name="title_display">Display</string>
     <string name="element_text" />
+    <string name="content_description_media">image of the extracted data</string>
+    <string name="extracted_data" />
+    <string name="secondary_text">element_text</string>
 </resources>
