@@ -9,11 +9,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.sybrintextocr.R;
 import com.example.sybrintextocr.databinding.FragmentDisplayBinding;
+
+import javax.inject.Inject;
 
 public class DisplayFragment extends Fragment {
 
     private FragmentDisplayBinding binding;
+
+    private RecyclerViewAdapter recyclerViewAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -23,8 +31,16 @@ public class DisplayFragment extends Fragment {
         binding = FragmentDisplayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textDashboard;
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
+
+
+        //Set up recyclerview
+        RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
+        recyclerViewAdapter = new RecyclerViewAdapter(new String[]{"hello world","whatsapp"});
+        recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
+        recyclerView.setAdapter(recyclerViewAdapter);
+
+
         return root;
     }
 
