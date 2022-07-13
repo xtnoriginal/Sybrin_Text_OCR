@@ -1,19 +1,29 @@
 package com.example.sybrintextocr.ui.display;
 
+import android.app.Application;
+
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class DisplayViewModel extends ViewModel {
+import com.example.sybrintextocr.database.PictureDetail;
+import com.example.sybrintextocr.database.PictureDetailsRepository;
 
-    private final MutableLiveData<String> mText;
+import java.util.List;
 
-    public DisplayViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is dashboard fragment");
+public class DisplayViewModel extends AndroidViewModel {
+
+    private LiveData<List<PictureDetail>> mPictureDetails;
+    private PictureDetailsRepository repository;
+
+    public DisplayViewModel(Application application) {
+        super(application);
+       repository = new PictureDetailsRepository(application);
+       mPictureDetails = repository.getAll();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<List<PictureDetail>> getPhotoDetail() {
+        return mPictureDetails;
     }
 }

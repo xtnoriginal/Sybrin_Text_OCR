@@ -25,7 +25,7 @@ public class DisplayFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        DisplayViewModel dashboardViewModel =
+        DisplayViewModel displayViewModel =
                 new ViewModelProvider(this).get(DisplayViewModel.class);
 
         binding = FragmentDisplayBinding.inflate(inflater, container, false);
@@ -36,7 +36,7 @@ public class DisplayFragment extends Fragment {
 
         //Set up recyclerview
         RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
-        recyclerViewAdapter = new RecyclerViewAdapter(new String[]{"hello world","whatsapp"});
+        recyclerViewAdapter = new RecyclerViewAdapter(displayViewModel.getPhotoDetail().getValue());
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
         recyclerView.setAdapter(recyclerViewAdapter);
 
