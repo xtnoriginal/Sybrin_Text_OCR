@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/image_background.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_camera.xml" value="0.18115942028985507" />
         <entry key="app/src/main/res/layout/fragment_display.xml" value="0.1828774062816616" />
         <entry key="app/src/main/res/layout/recyclerview_row_item.xml" value="0.182370820668693" />
       </map>
