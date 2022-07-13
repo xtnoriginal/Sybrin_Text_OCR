@@ -19,6 +19,7 @@ import android.hardware.camera2.CameraExtensionCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
+import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
@@ -54,7 +55,9 @@ import com.example.sybrintextocr.ui.camera.CameraViewModel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -282,7 +285,7 @@ public class CameraFragment extends Fragment {
         }
     }
 
-
+    File file ;
     private  void takePicture(){
         if(camera == null){
             return;
@@ -308,27 +311,73 @@ public class CameraFragment extends Fragment {
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
 
 
-
+            file = new File(Environment.getExternalStorageDirectory() + "/pic.jpg");
             reader.setOnImageAvailableListener(new OnImageAvailableListener() {
                 @Override
                 public void onImageAvailable(ImageReader imageReader) {
 
-                    Image image = reader.acquireLatestImage();
-                    ByteBuffer buffer = image.getPlanes()[0].getBuffer();
-                    byte[] bytes = new byte[buffer.capacity()];
-                    buffer.get(bytes);
+                    Image image = null;
+                    try {
+                        image = reader.acquireLatestImage();
+                        ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+                        byte[] bytes = new byte[buffer.capacity()];
+                        buffer.get(bytes);
+                        save(bytes);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        if (image != null) {
+                            image.close();
+                        }
+                    }
 
+
+
+                }
+
+
+
+                private void save(byte[] bytes) throws IOException {
+                    OutputStream output = null;
+                    try {
+                        output = new FileOutputStream(file);
+                        output.write(bytes);
+                    } finally {
+                        if (null != output) {
+                            output.close();
+                        }
+                    }
                 }
 
             }, mBackgroundHandler);
 
-           /* Image image = reader.acquireLatestImage();
-            Data.image =image;
-            ByteBuffer buffer = image.getPlanes()[0].getBuffer();
-            byte[] bytes = new byte[buffer.capacity()];
-            buffer.get(bytes);
-            Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
-            Data.bitmap = bitmapImage;*/
+
+
+
+            final CameraCaptureSession.CaptureCallback captureListener = new CameraCaptureSession.CaptureCallback() {
+                @Override
+                public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
+                    super.onCaptureCompleted(session, request, result);
+                    Toast.makeText(binding.getRoot().getContext(), "Saved:" + file, Toast.LENGTH_SHORT).show();
+                    createPreview();
+                }
+            };
+            camera.createCaptureSession(outputSurfaces, new CameraCaptureSession.StateCallback() {
+                @Override
+                public void onConfigured(CameraCaptureSession session) {
+                    try {
+                        session.capture(captureBuilder.build(), captureListener, mBackgroundHandler);
+                    } catch (CameraAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onConfigureFailed(CameraCaptureSession session) {
+                }
+            }, mBackgroundHandler);
 
             //final File file = new File(Environment.getExternalStorageDirectory() + "/pic.jpg");
 
