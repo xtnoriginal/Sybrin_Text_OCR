@@ -1,5 +1,6 @@
 package com.example.sybrintextocr.ui.display;
 
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +16,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sybrintextocr.R;
+import com.example.sybrintextocr.TextExtractor.MLKIT.TextProcessor;
 import com.example.sybrintextocr.database.PictureDetail;
 import com.example.sybrintextocr.databinding.FragmentDisplayBinding;
+import com.google.mlkit.vision.common.InputImage;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +31,7 @@ import javax.inject.Inject;
 public class DisplayFragment extends Fragment {
 
     private FragmentDisplayBinding binding;
-
+    TextProcessor textProcessor;
     private RecyclerViewAdapter recyclerViewAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -36,6 +41,9 @@ public class DisplayFragment extends Fragment {
 
         binding = FragmentDisplayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+
+        textProcessor = new TextProcessor();
 
         // Create the observer which updates the UI.
         final Observer<List<PictureDetail>> observer = new Observer<List<PictureDetail>>() {
@@ -66,6 +74,33 @@ public class DisplayFragment extends Fragment {
 
 
         return root;
+    }
+
+
+    public InputImage readImage(){
+
+        try (AssetManager assetManager = getContext().getAssets()) {
+            InputStream inputStream = assetManager.open("1.png");
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+        return  null;
+
+
+    }
+
+
+    public  void TestMLKIT(){
+        String[] ans = new String[1];
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ans[0] = textProcessor.getText();
+            }
+        })
     }
 
     @Override
