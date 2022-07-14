@@ -52,6 +52,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.sybrintextocr.R;
 import com.example.sybrintextocr.databinding.FragmentCameraBinding;
 import com.example.sybrintextocr.ui.camera.CameraViewModel;
+import com.example.sybrintextocr.ui.display.Data;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -311,10 +312,11 @@ public class CameraFragment extends Fragment {
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
 
 
-            file = new File(Environment.getExternalStorageDirectory() + "/pic.jpg");
+
             reader.setOnImageAvailableListener(new OnImageAvailableListener() {
                 @Override
                 public void onImageAvailable(ImageReader imageReader) {
+
 
                     Image image = null;
                     try {
@@ -322,34 +324,15 @@ public class CameraFragment extends Fragment {
                         ByteBuffer buffer = image.getPlanes()[0].getBuffer();
                         byte[] bytes = new byte[buffer.capacity()];
                         buffer.get(bytes);
-                        save(bytes);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+
+                        Data.image = BitmapFactory.decodeByteArray(bytes,0, bytes.length, null);
                     } finally {
                         if (image != null) {
                             image.close();
                         }
                     }
-
-
-
                 }
 
-
-
-                private void save(byte[] bytes) throws IOException {
-                    OutputStream output = null;
-                    try {
-                        output = new FileOutputStream(file);
-                        output.write(bytes);
-                    } finally {
-                        if (null != output) {
-                            output.close();
-                        }
-                    }
-                }
 
             }, mBackgroundHandler);
 
@@ -379,7 +362,6 @@ public class CameraFragment extends Fragment {
                 }
             }, mBackgroundHandler);
 
-            //final File file = new File(Environment.getExternalStorageDirectory() + "/pic.jpg");
 
 
         } catch (CameraAccessException e) {

@@ -62,13 +62,18 @@ public class DisplayFragment extends Fragment {
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         displayViewModel.getPhotoDetail().observe( this.getViewLifecycleOwner(),observer);
 
-        readImage();
+        if(Data.image !=null){
+            TestMLKIT(InputImage.fromBitmap(Data.image,0));
+        }else{
+            readImage();
+        }
+
 
          List<PictureDetail> pics = new ArrayList<>();
         pics.add(new PictureDetail(Data.data));
-         pics.add(new PictureDetail("hjgjjhjh"));
-        pics.add(new PictureDetail("l,gfjydtydtu"));
-        pics.add(new PictureDetail("helloworld"));
+         pics.add(new PictureDetail(Data.data));
+        pics.add(new PictureDetail(Data.data));
+        pics.add(new PictureDetail(Data.data));
 
 
         //Set up recyclerview

@@ -83,15 +83,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Context context = viewHolder.imageView.getContext();
         // get input stream
         InputStream ims = null;
-        try {
-            ims = context.getAssets().open("1.png");
-            // load image as Drawable
-            Drawable d = Drawable.createFromStream(ims, null);
-            // set image to ImageView
-            viewHolder.getImageView().setImageDrawable(d);
-            ims .close();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+
+        if(Data.image != null){
+            viewHolder.getImageView().setImageBitmap(Data.image);
+
+        }else {
+            try {
+                ims = context.getAssets().open("1.png");
+                // load image as Drawable
+                Drawable d = Drawable.createFromStream(ims, null);
+                // set image to ImageView
+                viewHolder.getImageView().setImageDrawable(d);
+                ims.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
 
