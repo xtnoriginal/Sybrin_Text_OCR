@@ -26,5 +26,8 @@ public interface PictureDetailDAO {
         @Query("SELECT * FROM picturedetail")
         LiveData<List<PictureDetail>> getAll();
 
+        @Query("SELECT * FROM picturedetail")
+        List<PictureDetail> getAllNonLive();
+
 
 }

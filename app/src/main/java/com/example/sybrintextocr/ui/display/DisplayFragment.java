@@ -54,6 +54,7 @@ public class DisplayFragment extends Fragment {
          List<PictureDetail> pics = new ArrayList<>();
          pics.add(new PictureDetail("hjgjjhjh"));
         pics.add(new PictureDetail("l,gfjydtydtu"));
+        pics.add(new PictureDetail("helloworld"));
 
         //Set up recyclerview
         RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
