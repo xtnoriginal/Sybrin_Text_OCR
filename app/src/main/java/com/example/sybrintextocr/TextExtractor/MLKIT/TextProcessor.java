@@ -7,6 +7,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.sybrintextocr.database.PictureDetail;
+import com.example.sybrintextocr.database.PictureDetailsRepository;
+import com.example.sybrintextocr.ui.camera.CameraFragment;
 import com.example.sybrintextocr.ui.display.Data;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,6 +23,7 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 public class TextProcessor {
 
     private TextRecognizer textRecognizer;
+    private PictureDetailsRepository pictureDetailsRepository;
 
 
     public  TextProcessor(){
@@ -53,8 +57,10 @@ public class TextProcessor {
                                 // [END get_text]
                                 // [END_EXCLUDE]
 
+                                PictureDetail pictureDetail =new PictureDetail(visionText.getText());
+                                pictureDetail.image = image.getBitmapInternal();
+                                Data.pictureDetailList.add(pictureDetail);
 
-                                Log.i("DisplayFragment", visionText.getText());
                                 Data.data = visionText.getText();
 
 

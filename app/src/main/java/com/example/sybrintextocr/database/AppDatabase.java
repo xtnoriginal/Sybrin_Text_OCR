@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {PictureDetail.class}, version = 1, exportSchema = false)
+@Database(entities = {PictureDetail.class}, version = 1, exportSchema = true)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract PictureDetailDAO pictureDetailDAO();

@@ -3,6 +3,7 @@ package com.example.sybrintextocr.database;
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class PictureDetailsRepository {
 
     // You must call this on a non-UI thread or your app will throw an exception. Room ensures
     // that you're not doing any long running operations on the main thread, blocking the UI.
-    void insert(PictureDetail pictureDetail) {
+    public void insert(PictureDetail pictureDetail) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             pictureDetailDAO.insert(pictureDetail);
         });

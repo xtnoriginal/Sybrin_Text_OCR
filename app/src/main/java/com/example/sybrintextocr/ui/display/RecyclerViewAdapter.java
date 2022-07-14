@@ -79,13 +79,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         // contents of the view with that element
         PictureDetail curr = localDataSet.get(position);
         viewHolder.getTextView().setText(curr.getDetails());
+        viewHolder.getImageView().setImageBitmap(Data.image);
+
+
 
         Context context = viewHolder.imageView.getContext();
         // get input stream
         InputStream ims = null;
 
 
-        if(Data.image != null){
+    /*    if(Data.image != null){
             viewHolder.getImageView().setImageBitmap(Data.image);
 
         }else {
@@ -99,7 +102,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
 
 

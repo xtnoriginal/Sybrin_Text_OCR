@@ -44,8 +44,6 @@ public class DisplayViewModel extends AndroidViewModel {
 
 
 
-
-
     }
 
     public LiveData<List<PictureDetail>> getPhotoDetail() {

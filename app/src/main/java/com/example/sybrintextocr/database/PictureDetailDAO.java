@@ -1,6 +1,7 @@
 package com.example.sybrintextocr.database;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -23,11 +24,10 @@ public interface PictureDetailDAO {
         @Delete
         void delete(PictureDetail pictureDetail);
 
-        @Query("SELECT * FROM picturedetail")
+        @Query("SELECT * FROM PictureDetail")
         LiveData<List<PictureDetail>> getAll();
 
-        @Query("SELECT * FROM picturedetail")
+        @Query("SELECT * FROM PictureDetail")
         List<PictureDetail> getAllNonLive();
-
 
 }

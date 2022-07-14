@@ -7,21 +7,30 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.sybrintextocr.database.PictureDetail;
 import com.example.sybrintextocr.database.PictureDetailsRepository;
+
+import java.util.List;
 
 public class CameraViewModel extends AndroidViewModel {
 
-    private final MutableLiveData<String> mText;
     private PictureDetailsRepository repository;
+
 
     public CameraViewModel(Application application) {
         super(application);
         repository = new PictureDetailsRepository(application);
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                repository.insert(new PictureDetail("chgfdhbklhklk"));
+            }
+        }).start();
+
+
     }
 
-    public LiveData<String> getText() {
-        return mText;
-    }
+
 }

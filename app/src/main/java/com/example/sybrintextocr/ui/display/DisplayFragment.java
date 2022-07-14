@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -62,23 +64,22 @@ public class DisplayFragment extends Fragment {
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         displayViewModel.getPhotoDetail().observe( this.getViewLifecycleOwner(),observer);
 
-        if(Data.image !=null){
+
+
+       /* if(Data.image !=null){
             TestMLKIT(InputImage.fromBitmap(Data.image,0));
         }else{
             readImage();
         }
+        */
 
 
-         List<PictureDetail> pics = new ArrayList<>();
-        pics.add(new PictureDetail(Data.data));
-         pics.add(new PictureDetail(Data.data));
-        pics.add(new PictureDetail(Data.data));
-        pics.add(new PictureDetail(Data.data));
+        List<PictureDetail> data = displayViewModel.getPictureDetailList();
 
 
         //Set up recyclerview
         RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
-        recyclerViewAdapter = new RecyclerViewAdapter(pics);
+        recyclerViewAdapter = new RecyclerViewAdapter(data);
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
         recyclerView.setAdapter(recyclerViewAdapter);
 
