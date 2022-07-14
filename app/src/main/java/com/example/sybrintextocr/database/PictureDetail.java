@@ -21,6 +21,10 @@ public class PictureDetail {
         return details;
     }
 
+    public int getUid() {
+        return uid;
+    }
+
     @PrimaryKey(autoGenerate = true)
     int uid;
 

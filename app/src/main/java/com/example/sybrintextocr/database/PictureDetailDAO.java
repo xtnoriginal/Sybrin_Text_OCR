@@ -30,4 +30,8 @@ public interface PictureDetailDAO {
         @Query("SELECT * FROM PictureDetail")
         List<PictureDetail> getAllNonLive();
 
+
+        @Query("SELECT COUNT(*) FROM PictureDetail")
+        int size();
+
 }

@@ -21,15 +21,11 @@ public class CameraViewModel extends AndroidViewModel {
         super(application);
         repository = new PictureDetailsRepository(application);
 
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                repository.insert(new PictureDetail("chgfdhbklhklk"));
-            }
-        }).start();
+    }
 
 
+    public String createFileName(){
+        return "extract"+repository.numberOfPicture()+1;
     }
 
 

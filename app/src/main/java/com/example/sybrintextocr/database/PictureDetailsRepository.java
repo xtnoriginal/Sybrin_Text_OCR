@@ -40,5 +40,9 @@ public class PictureDetailsRepository {
         });
     }
 
+    public int numberOfPicture(){
+        return pictureDetailDAO.size();
+    }
+
 
 }

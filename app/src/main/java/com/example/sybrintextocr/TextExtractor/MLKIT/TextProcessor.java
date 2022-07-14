@@ -30,7 +30,7 @@ public class TextProcessor {
         textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
     }
 
-    public String getText(InputImage image){
+    public void getText(InputImage image){
 
         String[] resultString = new String[1];
 
@@ -63,6 +63,11 @@ public class TextProcessor {
 
                                 Data.data = visionText.getText();
 
+                                String filename = "";
+                                //Data.pictureDetailsRepository.insert(pictureDetail);
+                                Log.i("TextProcessor",pictureDetail.getUid()+"");
+
+
 
 
 
@@ -81,8 +86,6 @@ public class TextProcessor {
 
 
 
-
-        return  resultString[0];
 
     }
 

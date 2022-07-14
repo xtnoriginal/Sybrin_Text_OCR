@@ -1,6 +1,8 @@
 package com.example.sybrintextocr.ui.camera;
 
 import android.Manifest;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,11 +26,13 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
 import android.media.ImageReader.OnImageAvailableListener;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -50,19 +54,25 @@ import androidx.lifecycle.ViewModelProvider;
 
 
 import com.example.sybrintextocr.R;
+import com.example.sybrintextocr.TextExtractor.MLKIT.TextProcessor;
+import com.example.sybrintextocr.database.PictureDetailsRepository;
 import com.example.sybrintextocr.databinding.FragmentCameraBinding;
 import com.example.sybrintextocr.ui.camera.CameraViewModel;
 import com.example.sybrintextocr.ui.display.Data;
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.text.TextRecognizer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 
 public class CameraFragment extends Fragment {
@@ -90,16 +100,20 @@ public class CameraFragment extends Fragment {
 
 
     private  TextureView.SurfaceTextureListener  textureViewListener;
+    private CameraViewModel cameraViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        CameraViewModel homeViewModel =
+
+        cameraViewModel =
                 new ViewModelProvider(this).get(CameraViewModel.class);
 
         binding = FragmentCameraBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         Context context = root.getContext();
+
+        Data.pictureDetailsRepository = new PictureDetailsRepository(getActivity().getApplication());
 
 
         //get CamerDevice
@@ -311,8 +325,6 @@ public class CameraFragment extends Fragment {
             int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
 
-
-
             reader.setOnImageAvailableListener(new OnImageAvailableListener() {
                 @Override
                 public void onImageAvailable(ImageReader imageReader) {
@@ -325,11 +337,41 @@ public class CameraFragment extends Fragment {
                         byte[] bytes = new byte[buffer.capacity()];
                         buffer.get(bytes);
 
-                        Data.image = BitmapFactory.decodeByteArray(bytes,0, bytes.length, null);
+
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length, null);
+                        String filename = cameraViewModel.createFileName();
+                        Log.i("Camera Fragment",filename);
+
+
+                        TextProcessor textProcessor= new TextProcessor();
+                        textProcessor.getText(InputImage.fromBitmap(bitmap,0));
+
+                        saveToExternalStorage(filename,bitmap);
                     } finally {
                         if (image != null) {
                             image.close();
                         }
+                    }
+                }
+
+
+                public void saveToExternalStorage(String imgname, Bitmap image){
+                    ContentResolver contentResolver = getContext().getContentResolver();
+                    ContentValues content = new ContentValues();
+                    content.put(MediaStore.Images.Media.DISPLAY_NAME,imgname+".jpg");
+                    content.put(MediaStore.Images.Media.MIME_TYPE,"image/jpeg");
+
+
+                    Uri uri = contentResolver.insert(MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),content);
+
+
+                    try{
+                        OutputStream outputStream = contentResolver.openOutputStream(Objects.requireNonNull(uri));
+                        image.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
+                        Objects.requireNonNull(outputStream);
+
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
                     }
                 }
 

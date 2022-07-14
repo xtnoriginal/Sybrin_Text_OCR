@@ -132,7 +132,7 @@ public class DisplayFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ans[0] = textProcessor.getText(image);
+                textProcessor.getText(image);
             }
         }).start();
 
