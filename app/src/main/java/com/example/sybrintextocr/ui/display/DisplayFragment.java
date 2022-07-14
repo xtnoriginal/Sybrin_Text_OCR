@@ -1,7 +1,11 @@
 package com.example.sybrintextocr.ui.display;
 
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +28,7 @@ import com.google.mlkit.vision.common.InputImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -57,12 +62,14 @@ public class DisplayFragment extends Fragment {
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         displayViewModel.getPhotoDetail().observe( this.getViewLifecycleOwner(),observer);
 
-
+        readImage();
 
          List<PictureDetail> pics = new ArrayList<>();
+        pics.add(new PictureDetail(Data.data));
          pics.add(new PictureDetail("hjgjjhjh"));
         pics.add(new PictureDetail("l,gfjydtydtu"));
         pics.add(new PictureDetail("helloworld"));
+
 
         //Set up recyclerview
         RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
@@ -77,30 +84,53 @@ public class DisplayFragment extends Fragment {
     }
 
 
-    public InputImage readImage(){
-
+    public String readImage(){
+        /*Bitmap bitmap = null;
         try (AssetManager assetManager = getContext().getAssets()) {
             InputStream inputStream = assetManager.open("1.png");
+            bitmap = BitmapFactory.decodeStream(inputStream);
         }catch (IOException e) {
             e.printStackTrace();
         }
 
 
+        if(bitmap == null){
+            Log.i("DisplayFragment", "invalid bitmap");
+            return null;}*/
 
-        return  null;
+        AssetManager assetManager = getContext().getAssets();
+        Bitmap bitmap = null;
+        try {
+
+            InputStream inputStream = assetManager.open("1.png");
+            bitmap = BitmapFactory.decodeStream(inputStream);
+
+            return TestMLKIT(InputImage.fromBitmap(bitmap,0));
+
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+        return "";
 
 
     }
 
 
-    public  void TestMLKIT(){
+    public  String TestMLKIT(InputImage image){
         String[] ans = new String[1];
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ans[0] = textProcessor.getText();
+                ans[0] = textProcessor.getText(image);
             }
-        })
+        }).start();
+
+        return ans[0];
     }
 
     @Override

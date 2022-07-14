@@ -12,6 +12,7 @@
 
     <!-- Media -->
     <ImageView
+        android:id="@+id/imageViewRecyclerview"
         android:layout_width="match_parent"
         android:layout_height="194dp"
         app:srcCompat="@drawable/image_background"

@@ -3,9 +3,11 @@ package com.example.sybrintextocr.TextExtractor.MLKIT;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.renderscript.ScriptGroup;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.sybrintextocr.ui.display.Data;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -36,8 +38,8 @@ public class TextProcessor {
                                 // Task completed successfully
                                 // [START_EXCLUDE]
                                 // [START get_text]
-                               // for (Text.TextBlock block : visionText.getTextBlocks()) {
-                              /*      Rect boundingBox = block.getBoundingBox();
+                               for (Text.TextBlock block : visionText.getTextBlocks()) {
+                                    Rect boundingBox = block.getBoundingBox();
                                     Point[] cornerPoints = block.getCornerPoints();
                                     String text = block.getText();
 
@@ -47,12 +49,14 @@ public class TextProcessor {
                                             // ...
                                         }
                                     }
-                                }*/
+                                }
                                 // [END get_text]
                                 // [END_EXCLUDE]
 
 
-                                resultString[0] = visionText.getText();
+                                Log.i("DisplayFragment", visionText.getText());
+                                Data.data = visionText.getText();
+
 
 
 
@@ -68,6 +72,9 @@ public class TextProcessor {
                                         // ...
                                     }
                                 });
+
+
+
 
         return  resultString[0];
 
