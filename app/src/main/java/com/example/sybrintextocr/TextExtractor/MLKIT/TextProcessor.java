@@ -30,7 +30,7 @@ public class TextProcessor {
         textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
     }
 
-    public void getText(InputImage image){
+    public void getText(String filename,InputImage image){
 
         String[] resultString = new String[1];
 
@@ -39,32 +39,15 @@ public class TextProcessor {
                         .addOnSuccessListener(new OnSuccessListener<Text>() {
                             @Override
                             public void onSuccess(Text visionText) {
-                                // Task completed successfully
-                                // [START_EXCLUDE]
-                                // [START get_text]
-                               for (Text.TextBlock block : visionText.getTextBlocks()) {
-                                    Rect boundingBox = block.getBoundingBox();
-                                    Point[] cornerPoints = block.getCornerPoints();
-                                    String text = block.getText();
 
-                                    for (Text.Line line: block.getLines()) {
-                                        // ...
-                                        for (Text.Element element: line.getElements()) {
-                                            // ...
-                                        }
-                                    }
-                                }
-                                // [END get_text]
-                                // [END_EXCLUDE]
-
-                                PictureDetail pictureDetail =new PictureDetail(visionText.getText());
+                                PictureDetail pictureDetail =new PictureDetail(visionText.getText(),filename);
                                 pictureDetail.image = image.getBitmapInternal();
                                 Data.pictureDetailList.add(pictureDetail);
 
                                 Data.data = visionText.getText();
 
-                                String filename = "";
-                                //Data.pictureDetailsRepository.insert(pictureDetail);
+
+                                Data.pictureDetailsRepository.insert(pictureDetail);
                                 Log.i("TextProcessor",pictureDetail.getUid()+"");
 
 

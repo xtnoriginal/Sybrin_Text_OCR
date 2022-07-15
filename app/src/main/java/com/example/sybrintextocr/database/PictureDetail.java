@@ -13,8 +13,9 @@ import androidx.room.PrimaryKey;
 public class PictureDetail {
 
 
-    public  PictureDetail(@NonNull String details) {
+    public  PictureDetail(@NonNull String details, @NonNull String filename) {
         this.details =details;
+        this.filename = filename;
     }
 
     public String getDetails(){
@@ -27,6 +28,13 @@ public class PictureDetail {
 
     @PrimaryKey(autoGenerate = true)
     int uid;
+
+    public String getFilename() {
+        return filename;
+    }
+
+    @ColumnInfo(name = "filename")
+    String filename;
 
     @ColumnInfo(name = "details")
     String details;

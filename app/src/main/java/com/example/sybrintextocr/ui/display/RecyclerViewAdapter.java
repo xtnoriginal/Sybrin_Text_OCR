@@ -1,7 +1,11 @@
 package com.example.sybrintextocr.ui.display;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sybrintextocr.R;
 import com.example.sybrintextocr.database.PictureDetail;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -84,14 +89,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
         Context context = viewHolder.imageView.getContext();
-        // get input stream
-        InputStream ims = null;
+
+        // Open a specific media item using InputStream.
+        ContentResolver resolver = context.getApplicationContext()
+                .getContentResolver();
 
 
-    /*    if(Data.image != null){
-            viewHolder.getImageView().setImageBitmap(Data.image);
 
-        }else {
+
+
+
+
+
+        InputStream ims;
             try {
                 ims = context.getAssets().open("1.png");
                 // load image as Drawable
@@ -102,10 +112,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }*/
-
-
-
 
     }
 

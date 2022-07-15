@@ -75,6 +75,7 @@ public class DisplayFragment extends Fragment {
 
 
         List<PictureDetail> data = displayViewModel.getPictureDetailList();
+        Log.i("DisplayFragment", data.size()+" ");
 
 
         //Set up recyclerview
@@ -82,9 +83,6 @@ public class DisplayFragment extends Fragment {
         recyclerViewAdapter = new RecyclerViewAdapter(data);
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
         recyclerView.setAdapter(recyclerViewAdapter);
-
-
-
 
         return root;
     }
@@ -132,7 +130,7 @@ public class DisplayFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                textProcessor.getText(image);
+                //textProcessor.getText(image);
             }
         }).start();
 

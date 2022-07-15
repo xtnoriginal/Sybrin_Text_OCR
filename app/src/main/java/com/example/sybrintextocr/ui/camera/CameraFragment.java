@@ -344,7 +344,14 @@ public class CameraFragment extends Fragment {
 
 
                         TextProcessor textProcessor= new TextProcessor();
-                        textProcessor.getText(InputImage.fromBitmap(bitmap,0));
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                textProcessor.getText(filename,InputImage.fromBitmap(bitmap,0));
+                            }
+                        }).start();
+
 
                         saveToExternalStorage(filename,bitmap);
                     } finally {
@@ -355,7 +362,7 @@ public class CameraFragment extends Fragment {
                 }
 
 
-                public void saveToExternalStorage(String imgname, Bitmap image){
+                public String saveToExternalStorage(String imgname, Bitmap image){
                     ContentResolver contentResolver = getContext().getContentResolver();
                     ContentValues content = new ContentValues();
                     content.put(MediaStore.Images.Media.DISPLAY_NAME,imgname+".jpg");
@@ -363,6 +370,7 @@ public class CameraFragment extends Fragment {
 
 
                     Uri uri = contentResolver.insert(MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),content);
+                    Log.i(TAG,uri.getPath());
 
 
                     try{
@@ -372,7 +380,11 @@ public class CameraFragment extends Fragment {
 
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
+                        return "";
                     }
+
+                    return uri.getPath();
+
                 }
 
 
@@ -409,6 +421,8 @@ public class CameraFragment extends Fragment {
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
+
+
 
     }
 
