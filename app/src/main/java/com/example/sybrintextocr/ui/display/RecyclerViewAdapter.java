@@ -2,10 +2,12 @@ package com.example.sybrintextocr.ui.display;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,13 +97,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .getContentResolver();
 
 
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            try {
+                Bitmap thumbnail =
+                        context.getContentResolver().loadThumbnail(
+                               Uri.parse("content://media/external_primary/images/media/15077"), new Size(640, 480), null);
+                viewHolder.getImageView().setImageBitmap(thumbnail);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else {
 
 
-
-
-
-
-        InputStream ims;
+            InputStream ims;
             try {
                 ims = context.getAssets().open("1.png");
                 // load image as Drawable
@@ -112,6 +120,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
 
     }
 

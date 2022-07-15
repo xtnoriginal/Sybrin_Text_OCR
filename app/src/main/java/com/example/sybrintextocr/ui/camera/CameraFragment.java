@@ -370,7 +370,7 @@ public class CameraFragment extends Fragment {
 
 
                     Uri uri = contentResolver.insert(MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY),content);
-                    Log.i(TAG,uri.getPath());
+                    Log.i(TAG,uri.toString());
 
 
                     try{
@@ -383,7 +383,10 @@ public class CameraFragment extends Fragment {
                         return "";
                     }
 
-                    return uri.getPath();
+
+                    Data.uri = uri;
+
+                    return uri.toString();
 
                 }
 
