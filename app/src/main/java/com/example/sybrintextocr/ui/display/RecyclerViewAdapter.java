@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sybrintextocr.R;
@@ -27,9 +29,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-
-    private List<PictureDetail> localDataSet;
+public class RecyclerViewAdapter extends ListAdapter<PictureDetail,RecyclerViewAdapter.ViewHolder> {
 
     /**
      * Provide a reference to the type of views that you are using
@@ -56,15 +56,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    /**
-     * Initialize the dataset of the Adapter.
-     *
-     * @param dataSet String[] containing the data to populate views to be used
-     * by RecyclerView.
-     */
-    @Inject
-    public RecyclerViewAdapter(@NonNull  List<PictureDetail> dataSet) {
-        localDataSet = dataSet;
+
+
+    public RecyclerViewAdapter(@NonNull DiffUtil.ItemCallback<PictureDetail> diffCallback) {
+        super(diffCallback);
+
     }
 
     // Create new views (invoked by the layout manager)
@@ -84,7 +80,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        PictureDetail curr = localDataSet.get(position);
+        PictureDetail curr = getItem(position);
         viewHolder.getTextView().setText(curr.getDetails());
         viewHolder.getImageView().setImageBitmap(Data.image);
 
@@ -101,7 +97,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             try {
                 Bitmap thumbnail =
                         context.getContentResolver().loadThumbnail(
-                               Uri.parse("content://media/external_primary/images/media/15077"), new Size(640, 480), null);
+                               Uri.parse(curr.getFilename()), new Size(640, 480), null);
                 viewHolder.getImageView().setImageBitmap(thumbnail);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -124,9 +120,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
-    @Override
-    public int getItemCount() {
-        return localDataSet.size();
+
+
+    static class PictureDetailsDiff extends DiffUtil.ItemCallback<PictureDetail> {
+
+        @Override
+        public boolean areItemsTheSame(@NonNull PictureDetail oldItem, @NonNull PictureDetail newItem) {
+            return oldItem == newItem;
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull PictureDetail oldItem, @NonNull PictureDetail newItem) {
+            return oldItem.getUid()== newItem.getUid() || oldItem.getFilename().equals(newItem.getFilename());
+        }
     }
 }

@@ -75,6 +75,7 @@ import java.util.List;
 import java.util.Objects;
 
 
+
 public class CameraFragment extends Fragment {
     private static final String TAG = "CameraFragment";
     private FragmentCameraBinding binding;
@@ -340,6 +341,7 @@ public class CameraFragment extends Fragment {
 
                         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0, bytes.length, null);
                         String filename = cameraViewModel.createFileName();
+                        String uri =  saveToExternalStorage(filename,bitmap);
                         Log.i("Camera Fragment",filename);
 
 
@@ -348,12 +350,12 @@ public class CameraFragment extends Fragment {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                textProcessor.getText(filename,InputImage.fromBitmap(bitmap,0));
+                                textProcessor.getText(uri,InputImage.fromBitmap(bitmap,ORIENTATIONS.get(rotation)));
                             }
                         }).start();
 
 
-                        saveToExternalStorage(filename,bitmap);
+
                     } finally {
                         if (image != null) {
                             image.close();
@@ -384,7 +386,7 @@ public class CameraFragment extends Fragment {
                     }
 
 
-                    Data.uri = uri;
+
 
                     return uri.toString();
 

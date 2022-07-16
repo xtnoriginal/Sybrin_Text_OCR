@@ -52,26 +52,10 @@ public class DisplayFragment extends Fragment {
 
         textProcessor = new TextProcessor();
 
-        // Create the observer which updates the UI.
-        final Observer<List<PictureDetail>> observer = new Observer<List<PictureDetail>>() {
-            @Override
-            public void onChanged(@Nullable final List<PictureDetail> pictureDetail) {
-                // Update the UI, in this case, a TextView.
-                recyclerViewAdapter.notifyDataSetChanged();
-            }
-        };
-
-        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        displayViewModel.getPhotoDetail().observe( this.getViewLifecycleOwner(),observer);
 
 
 
-       /* if(Data.image !=null){
-            TestMLKIT(InputImage.fromBitmap(Data.image,0));
-        }else{
-            readImage();
-        }
-        */
+
 
 
         List<PictureDetail> data = displayViewModel.getPictureDetailList();
@@ -80,9 +64,20 @@ public class DisplayFragment extends Fragment {
 
         //Set up recyclerview
         RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
-        recyclerViewAdapter = new RecyclerViewAdapter(data);
+        recyclerViewAdapter = new RecyclerViewAdapter(new RecyclerViewAdapter.PictureDetailsDiff());
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
         recyclerView.setAdapter(recyclerViewAdapter);
+
+
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+       displayViewModel.getPhotoDetail().observe(this.getActivity(), words -> {
+            // Update the cached copy of the words in the adapter.
+            recyclerViewAdapter.submitList(words);
+        });
+
+
+
+
 
         return root;
     }
